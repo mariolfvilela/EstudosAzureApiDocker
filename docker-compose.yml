@@ -6,17 +6,44 @@ services:
     deploy:
           labels:
             estudos.azure.api.docker: "# Um projeto teste............... boss: Mario .............. #"
+    expose:
+      - "80"
     ports:
-        - "8080:80"
+    - "8000:80"
+    environment:
+      ConnectionStringDocker: "Server=(localhost)\\mssqllocaldb;Database=EstudosAzureApiDocker;User Id=sa;Password=123456;MultipleActiveResultSets=true"
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_HTTPS_PORT: "8001"
+      API_ENV: "production"
     networks:
-      - frontend
       - backend
     deploy:
       mode: global
     build:
       context: .
       dockerfile: API/Dockerfile
+    depends_on:
+            - sql-server
+  sql-server:
+    networks:
+      - backend
+    image: "mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04"
+    # https://hub.docker.com/_/microsoft-mssql-server
+    # mcr.microsoft.com/mssql/server
+    # mcr.microsoft.com/mssql/server:latest
+    # mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04
+    # mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+    # mcr.microsoft.com/mssql/server:2017-CU21-ubuntu-16.04
+    # mcr.microsoft.com/mssql/server:2017-latest
+    environment:        
+        SA_PASSWORD: "123456"
+        ACCEPT_EULA: "Y"
+        MSSQL_TCP_PORT: "1433"
+        MSSQL_PID: Express #(default: Developer, Standard, Enterprise, EnterpriseCore)#
+    ports:
+        - "1433:1433"
+    volumes:
+        - ./sql-server:/tmp/data
 
 networks:
   backend:
-  frontend:

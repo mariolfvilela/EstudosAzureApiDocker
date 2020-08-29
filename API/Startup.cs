@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +28,16 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"){
+
+            var builder = new SqlConnectionStringBuilder(Configuration["ConnectionStringDocker"] ?? Configuration.GetConnectionString("BancoSqlServer"));
+            var connection = builder.ConnectionString;
+
+            services.AddDbContext<EstudosAzureApiDockerContext>(
+                options => options.UseSqlServer(connection));
+
+
+
             services.AddControllers();
         }
 
@@ -46,6 +59,8 @@ namespace API
             {
                 endpoints.MapControllers();
             });
+
+            DatabasePreparation.PrePopulation(app);
         }
     }
 }
