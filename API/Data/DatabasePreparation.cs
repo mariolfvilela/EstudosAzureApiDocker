@@ -9,9 +9,11 @@ namespace API.Data
 {
     public static class DatabasePreparation
     {
-        public static async void PrePopulation(IApplicationBuilder app) {
+        public static async void PrePopulation(IApplicationBuilder app)
+        {
 
-            using (var serviceScope = app.ApplicationServices.CreateScope()) {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
                 await SeedDataAsync(serviceScope.ServiceProvider.GetService<EstudosAzureApiDockerContext>());
             }
         }
@@ -21,7 +23,7 @@ namespace API.Data
 
             context.Database.Migrate();
 
-            if (! await context.Colours.AnyAsync())
+            if (!await context.Colours.AnyAsync())
             {
                 Console.WriteLine("Adicionando dados na tabela Colour");
                 context.Colours.AddRange(
@@ -29,12 +31,12 @@ namespace API.Data
                     new Colour() { ColourName = "Red" },
                     new Colour() { ColourName = "Blue" }
                     );
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return;
             }
 
             Console.WriteLine("Bando preparado....");
         }
     }
-    
+
 }
