@@ -23,8 +23,8 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
     networks:
       - backend
-    deploy:
-      mode: global
+    # deploy:
+      # mode: global
     build:
       context: .
       dockerfile: API/Dockerfile
@@ -49,5 +49,7 @@ services:
         # MSSQL_PID: Express #(default: Developer, Standard, Enterprise, EnterpriseCore)#
     ports:
         - "1433:1433"
+    expose: 
+        - 1433
     volumes:
         - ./sql-server:/tmp/data

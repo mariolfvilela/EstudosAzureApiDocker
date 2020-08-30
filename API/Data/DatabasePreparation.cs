@@ -27,15 +27,19 @@ namespace API.Data
             {
                 Console.WriteLine("Adicionando dados na tabela Colour");
                 context.Colours.AddRange(
-                    new Colour() { ColourName = "Grenn" },
+                    new Colour() { ColourName = "Green" },
                     new Colour() { ColourName = "Red" },
-                    new Colour() { ColourName = "Blue" }
+                    new Colour() { ColourName = "Blue" },
+                    new Colour() { ColourName = "Yellow" },
+                    new Colour() { ColourName = "Purple" },
+                    new Colour() { ColourName = "Orange" }
                     );
                 await context.SaveChangesAsync();
+                Console.WriteLine("Dados adiconado com sucesso.... #Rodando atualizações no bando de dados ... Finalizado");
                 return;
             }
 
-            Console.WriteLine("Bando preparado....");
+            Console.WriteLine("Banco de Dados preparado para uso....");
         }
     }
 
