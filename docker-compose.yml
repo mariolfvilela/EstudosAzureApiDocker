@@ -3,18 +3,22 @@ version: '3.4'
 networks:
   backend:
 
+volumes:
+    sql-server:
+
 services:
   api:
     image: ${DOCKER_REGISTRY-}api:v1
+    restart: always
     deploy:
           labels:
             estudos.azure.api.docker: "# Um projeto teste............... boss: Mario .............. #"
-    # expose:
-      # - "80"
+    expose:
+        - "80"
     ports:
-    - "5001:5001" #"8000:80"
+    - "51080:80" #"8000:80"
     environment:
-      ConnectionStringDocker: "Server=sql-server,1433;Database=Master;User Id=SA;Password=s@123404M0;MultipleActiveResultSets=true"
+      ConnectionStringDocker: "Server=sql-server,1433;Database=EstudosAzureApiDocker;User Id=SA;Password=s@123404M0;MultipleActiveResultSets=true"
       # ConnectionStringDocker: "Server=(localhost)\\mssqllocaldb;Database=EstudosAzureApiDocker;User Id=sa;Password=123456;MultipleActiveResultSets=true"
       # ASPNETCORE_URLS: "https://+;http://+"
       ASPNETCORE_URLS: "http://+:5001"
@@ -33,23 +37,32 @@ services:
   sql-server:
     networks:
       - backend
-    image: "mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04"
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
     # https://hub.docker.com/_/microsoft-mssql-server
     # mcr.microsoft.com/mssql/server
     # mcr.microsoft.com/mssql/server:latest
-    # mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04
+    # mcr.microsoft.com/mssql/server:2019-latest
+    # mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04 *
     # mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
     # mcr.microsoft.com/mssql/server:2017-CU21-ubuntu-16.04
     # mcr.microsoft.com/mssql/server:2017-latest
     container_name: sql-server
-    environment:        
-        SA_PASSWORD: "s@123404M0"
+    restart: always
+    environment:        # https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-environment-variables?view=sql-server-2017
+        # SA_PASSWORD: "s@123404M0"
+        MSSQL_SA_PASSWORD: "s@123404M0"
         ACCEPT_EULA: "Y"
-        # MSSQL_TCP_PORT: "1433"
-        MSSQL_PID: Express #(default: Developer, Standard, Enterprise, EnterpriseCore)#
+        MSSQL_TCP_PORT: "1433"
+        MSSQL_PID: Developer #(default: Developer, Express, Standard, Enterprise, EnterpriseCore)#
     ports:
-        - "1433:1433"
+        - 1433:1433
     expose: 
         - 1433
+    cap_add:
+        - SYS_PTRACE
+        - SYS_ADMIN
     volumes:
-        - ./sql-server:/tmp/data
+        - sql-server:/tmp/mssql/data
+# - sql-server:/tmp/mssql/data
+# - sql-server: /~/Projects/Temp/Database/mssql
+# /sql-server:/tmp/data

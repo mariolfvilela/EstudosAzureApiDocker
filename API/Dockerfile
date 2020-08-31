@@ -10,7 +10,7 @@ WORKDIR /src
 COPY API/API.csproj API/
 RUN dotnet restore "API/API.csproj"
 
-RUN pwsh -Command Write-Host "API: Gerando uma nova imagem Docker com Alpine e testando o PowerShell Core"
+RUN pwsh -Command Write-Host "API: Gerando uma imagem Docker DotNet Core e testando o PowerShell Core"
 
 
 COPY . .
