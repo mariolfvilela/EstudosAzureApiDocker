@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace API
 {
@@ -39,6 +39,23 @@ namespace API
 
 
             services.AddControllers();
+
+            services.AddSwaggerGen(c => {
+
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "Juros Compostos",
+                        Version = "v2",
+                        Description = "Exemplo de API REST criada com o ASP.NET Core 3.1 para cálculo de juros compostos/empréstimos",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Mário Vilela",
+                            Url = new Uri("https://github.com/mariolfvilela")
+                        }
+                    });
+            });
+            services.AddApplicationInsightsTelemetry(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +65,16 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder.AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowAnyHeader());
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cadastro de Produtos");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
 
