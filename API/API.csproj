@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Service\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Data\ICommandAPIRepo.cs" />
