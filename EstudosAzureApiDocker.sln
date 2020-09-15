@@ -7,6 +7,12 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Testes", "API.Testes\API.Testes.csproj", "{A3CCBCD5-B2BD-41BC-A72E-D5190BDDEC73}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConfigDockerAzure", "ConfigDockerAzure", "{67F7B217-D785-481D-8D0A-86DAD91FBA42}"
+	ProjectSection(SolutionItems) = preProject
+		AzureCredentials.ps1 = AzureCredentials.ps1
+		dockerhub-tests-acr-azurewebapp.yml = dockerhub-tests-acr-azurewebapp.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
