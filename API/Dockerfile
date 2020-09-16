@@ -1,28 +1,19 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-WORKDIR /src
-# COPY API/API.csproj API/
+# Exibir a versão do .NET Core
+RUN dotnet --version
+
 # Copiar csproj e restaurar dependencias
 COPY *.csproj ./
-RUN dotnet restore "API/API.csproj"
+RUN dotnet restore
 
-RUN pwsh -Command Write-Host "API: Gerando uma imagem Docker DotNet Core e testando o PowerShell Core"
+# Build da aplicacao
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-
-COPY . .
-WORKDIR "/src/API"
-RUN dotnet build "API.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "API.csproj" -c Release -o /app/publish
-
-FROM base AS final
+# Build da imagem
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "API.dll"]
