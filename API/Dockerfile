@@ -7,8 +7,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY API/API.csproj ./
-RUN dotnet restore "API/API.csproj"
+# Copiar csproj e restaurar dependencias
+COPY *.csproj ./
+RUN dotnet restore
 
 RUN pwsh -Command Write-Host "API: Gerando uma imagem Docker DotNet Core e testando o PowerShell Core"
 
