@@ -49,4 +49,4 @@ jobs:
         uses: Azure/webapps-deploy@v2
         with:
           app-name: ${{ env.NOME_WEBAPP_AZURE }}
-          images: "groffegithubactions.azurecr.io/api:latest"
+          images: "marioapi.azurecr.io/marioapi:latest"
